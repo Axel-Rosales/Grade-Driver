@@ -1,0 +1,62 @@
+public class TestGrades {
+   private static int myStudentCount = 0;
+   
+   private String myFirstName;
+   private String myLastName;
+   private int[] myTestScore;
+   
+   // Fixed constructor
+   public TestGrades(String myFirstName, String myLastName, int[] myTestScore) {
+      this.myFirstName = myFirstName;
+      this.myLastName = myLastName;
+      this.myTestScore = new int[4];
+      // Initialize scores array
+      for (int i = 0; i < 4; i++) {
+         this.myTestScore[i] = myTestScore[i];
+      }
+      myStudentCount++; // Increment student count
+   }
+   
+   public static int getStudentCount() {
+      return myStudentCount;
+   }
+
+   public String getFirstName() {
+      return myFirstName;
+   }
+
+   public String getLastName() {
+      return myLastName;
+   }
+
+   public int getTestAverage() {
+      int total = 0;
+      int lowestScore = this.myTestScore[0];
+      for(int i = 0; i < 4; i++) {
+         total += this.myTestScore[i];
+         if(this.myTestScore[i] < lowestScore) {
+            lowestScore = this.myTestScore[i];
+         }
+      }
+      return (total - lowestScore) / 3; // Drop the lowest score
+   }
+   
+   public void setScore (int index, int score) {
+      if (index < 0 || index >= 4 || score < 0 || score > 100) {
+         throw new IllegalArgumentException("Invalid index or score");
+      }
+      this.myTestScore[index] = score;
+   }
+
+   public String toString() {
+      String scores = "[";
+      for (int i = 0; i < 4; i++) {
+         scores += this.myTestScore[i];
+         if (i < 3) {
+            scores += ", ";
+         }
+      }
+      scores += "]";
+      return this.myFirstName + " " + this.myLastName + " " + scores + " Average = " + getTestAverage();
+   }
+}

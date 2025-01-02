@@ -1,0 +1,79 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class GradeDriver {
+
+    public static void main(String[] theArgs) {
+        // Declare needed variables here
+        TestGrades[] gradesArray = null;
+        Scanner input = null;
+        PrintStream output = null;
+        try {
+            input = new Scanner(new File("in4.txt"));
+            output = new PrintStream(new File("out4.txt"));
+        } catch (FileNotFoundException e) {
+            System.out.println("Error opening file: " + e);
+            return;
+        }
+
+        // Fill in the operations that create, manipulate, and output the results of the TestGrades objects here
+        gradesArray = getGrades(input);
+
+        report(gradesArray, output);
+
+        if (input != null) {
+            input.close();
+        }
+        if (output != null) {
+            output.close();
+        }
+    }
+
+    // Method to read grades from file and create TestGrades objects
+    public static TestGrades[] getGrades(Scanner input) {
+        int numStudents = input.nextInt();
+        input.nextLine(); // Skip the line after the student count
+        TestGrades[] gradesArray = new TestGrades[numStudents];
+
+        for (int i = 0; i < numStudents; i++) {
+            String firstName = input.next();
+            String lastName = input.next();
+            int[] scores = new int[4];
+            for (int j = 0; j < 4; j++) {
+                scores[j] = input.nextInt();
+            }
+            // Correctly create a new TestGrades object with the proper constructor
+            gradesArray[i] = new TestGrades(firstName, lastName, scores);
+        }
+        return gradesArray;
+    }
+
+    // Method to report the results
+    public static void report(TestGrades[] gradesArray, PrintStream output) {
+        int numStudents = gradesArray.length;
+        int highestAverage = 0;
+        int lowestAverage = 100;
+        int totalAverage = 0;
+        output.println("Total number of students: " + numStudents);
+
+        for (int i = 0; i < gradesArray.length; i++) {
+            TestGrades student = gradesArray[i];
+            int studentAverage = student.getTestAverage();
+            output.println(student);
+
+            if (studentAverage > highestAverage) {
+                highestAverage = studentAverage;
+            }
+            if (studentAverage < lowestAverage) {
+                lowestAverage = studentAverage;
+            }
+            totalAverage += studentAverage;
+        }
+        int classAverage = totalAverage / numStudents;
+        output.println("Highest Student Average: " + highestAverage);
+        output.println("Lowest Student Average: " + lowestAverage);
+        output.println("Class Average: " + classAverage);
+    }
+}
